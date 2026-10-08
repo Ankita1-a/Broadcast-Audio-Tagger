@@ -1,0 +1,46 @@
+# The data pipeline. `dvc repro` runs only the stages whose inputs changed.
+# The raw downloads in data/raw are fixed public files, so they are not tracked here.
+
+stages:
+  inventory:
+    cmd: python src/data/explore.py
+    deps:
+      - src/data/explore.py
+    outs:
+      - data/processed/inventory.csv
+
+  build:
+    cmd: python src/data/build_dataset.py
+    deps:
+      - src/data/build_dataset.py
+      - configs/data.yaml
+      - data/processed/inventory.csv
+    outs:
+      - data/processed/windows
+      - data/processed/windows.csv
+
+  validate:
+    cmd: python src/data/validate.py
+    deps:
+      - src/data/validate.py
+      - configs/data.yaml
+      - data/processed/windows
+      - data/processed/windows.csv
+    metrics:
+      - reports/data_validation.json:
+          cache: false
+
+  # CLAP embeddings are derived data: they change only if the clips or the CLAP model change.
+  clap_embeddings:
+    cmd: python src/extract_clap.py
+    deps:
+      - src/extract_clap.py
+      - src/clap_utils.py
+      - data/processed/windows
+      - data/processed/windows.csv
+    params:
+      - configs/clap.yaml:
+          - model_name
+          - sample_rate
+    outs:
+      - data/processed/clap

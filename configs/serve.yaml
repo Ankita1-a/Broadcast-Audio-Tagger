@@ -1,0 +1,10 @@
+# Step 11: settings for the tagging API.
+# Silence level and loudness target are read from configs/data.yaml, so serving
+# prepares audio exactly like training did.
+
+hop_s: 2.0              # step between windows; 2.0 = no overlap (fastest), 1.0 = smoother timeline
+smooth_windows: 3       # average each window's probabilities with its neighbours to stop flicker
+batch_size: 16          # windows per model call (keeps memory low)
+max_duration_s: 1800    # reject files longer than 30 minutes
+max_upload_mb: 200
+low_confidence: 0.6     # windows below this are counted as "low confidence" in the request log

@@ -1,0 +1,50 @@
+{
+  "time": "2026-10-07T20:24:59+00:00",
+  "registered_model": "audio-tagger",
+  "alias": "champion",
+  "previous_champion": null,
+  "champion": 3,
+  "decision": "promote v3: first champion",
+  "rules": {
+    "alias": "champion",
+    "select_on": "val_macro_f1",
+    "min_class_f1": 0.8,
+    "max_cpu_ms_per_window": 100,
+    "min_improvement": 0.005
+  },
+  "versions": [
+    {
+      "version": 1,
+      "family": "A_cnn_scratch",
+      "val_macro_f1": 0.9533,
+      "val_min_class_f1": 0.8293,
+      "test_macro_f1": 0.8038,
+      "cpu_ms": 2.3994,
+      "size_mb": 1.2,
+      "eligible": true,
+      "reasons": "all rules passed"
+    },
+    {
+      "version": 2,
+      "family": "B_clap_zero_shot",
+      "val_macro_f1": 0.8453,
+      "val_min_class_f1": 0.7586,
+      "test_macro_f1": 0.8588,
+      "cpu_ms": 74.0053,
+      "size_mb": 113.2,
+      "eligible": false,
+      "reasons": "noise F1 0.759 < 0.8"
+    },
+    {
+      "version": 3,
+      "family": "C_clap_frozen_head",
+      "val_macro_f1": 0.9694,
+      "val_min_class_f1": 0.9,
+      "test_macro_f1": 0.9633,
+      "cpu_ms": 72.3874,
+      "size_mb": 113.2,
+      "eligible": true,
+      "reasons": "all rules passed"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+# Step 12: monitoring settings.
+
+api_url: http://127.0.0.1:8000
+
+# Simulated traffic. Each recording joins 4 "segments" of 2-3 test-set clips with the
+# same label (e.g. 6 s speech, 4 s music, ...), so it looks like a real broadcast.
+traffic:
+  segments_per_recording: 4
+  clips_per_segment: [2, 3]
+  scenarios:
+    normal:              # like the training data
+      degrade: none
+    phone:               # the same content, but recorded over a phone line
+      degrade: phone
+    music_heavy:         # same audio quality, different content mix (e.g. a music channel)
+      degrade: none
+      label_weights: {music: 0.4, speech_over_music: 0.4, speech: 0.05,
+                      applause: 0.05, laughter: 0.05, noise: 0.05}
+
+phone:
+  band_hz: [300, 3400]   # telephone bandwidth
+  sample_rate: 8000      # narrowband phone audio
+  gain_db: -10           # quieter recording
+  noise_snr_db: 20       # line hiss
+
+# Drift report.
+min_reference: 30        # requests needed to freeze a reference
+min_current: 20          # requests needed before a drift report is meaningful
+features:
+  input:                 # what the incoming audio looks like
+    numerical: [mean_rms_db, silent_share, duration_s]
+    categorical: [original_sample_rate, original_channels]
+  model:                 # how the model reacts (no labels needed)
+    numerical: [mean_confidence, low_confidence_share,
+                label_share_speech, label_share_music, label_share_speech_over_music,
+                label_share_applause, label_share_laughter, label_share_noise]
+alerts:
+  drift_share: 0.3           # alert if at least 30% of features drift
+  max_confidence_drop: 0.05  # alert if mean confidence falls by more than this

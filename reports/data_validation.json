@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "n_windows": 2629,
+  "minutes_of_audio": 87.6,
+  "windows_per_class_and_split": {
+    "test": {
+      "applause": 23,
+      "laughter": 24,
+      "music": 90,
+      "noise": 105,
+      "speech": 90,
+      "speech_over_music": 90
+    },
+    "train": {
+      "applause": 70,
+      "laughter": 67,
+      "music": 420,
+      "noise": 390,
+      "speech": 420,
+      "speech_over_music": 420
+    },
+    "val": {
+      "applause": 24,
+      "laughter": 21,
+      "music": 90,
+      "noise": 105,
+      "speech": 90,
+      "speech_over_music": 90
+    }
+  },
+  "problems": {
+    "table": [],
+    "dataset": [],
+    "audio": []
+  }
+}

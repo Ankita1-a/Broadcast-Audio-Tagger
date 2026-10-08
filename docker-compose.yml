@@ -1,0 +1,11 @@
+# Step 11: run the API with `docker compose up --build`.
+services:
+  api:
+    build: .
+    image: audio-tagger-api:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/app/logs        # request log stays on your Mac for monitoring (Step 12)
+    mem_limit: 2g               # CLAP + PyTorch need about 1-1.5 GB
+    restart: unless-stopped

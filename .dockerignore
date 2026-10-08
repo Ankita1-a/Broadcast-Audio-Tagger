@@ -1,0 +1,6 @@
+# Send Docker only what the image needs (not the 12 GB of raw audio, MLflow runs, etc.).
+*
+!configs/
+!src/serve/
+!serving_model/
+**/__pycache__

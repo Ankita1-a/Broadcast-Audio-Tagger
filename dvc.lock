@@ -1,0 +1,94 @@
+schema: '2.0'
+stages:
+  inventory:
+    cmd: python src/data/explore.py
+    deps:
+    - path: src/data/explore.py
+      hash: md5
+      md5: dcf1c800c56e6cf866943d04f3f2575e
+      size: 3863
+    outs:
+    - path: data/processed/inventory.csv
+      hash: md5
+      md5: 8e1a1ad9add7468662339d192435315c
+      size: 426909
+  build:
+    cmd: python src/data/build_dataset.py
+    deps:
+    - path: configs/data.yaml
+      hash: md5
+      md5: f65e74219059a5bcb8320cbb4110020f
+      size: 1592
+    - path: data/processed/inventory.csv
+      hash: md5
+      md5: 8e1a1ad9add7468662339d192435315c
+      size: 426909
+    - path: src/data/build_dataset.py
+      hash: md5
+      md5: bebf213a6ccefe7e330c5c72fd2431c0
+      size: 10317
+    outs:
+    - path: data/processed/windows
+      hash: md5
+      md5: 96b7fcbd75f8538f692e8429a8eb441d.dir
+      size: 168371676
+      nfiles: 2629
+    - path: data/processed/windows.csv
+      hash: md5
+      md5: 7d7225f5c28ac5f984525012e5af7d24
+      size: 571324
+  validate:
+    cmd: python src/data/validate.py
+    deps:
+    - path: configs/data.yaml
+      hash: md5
+      md5: f65e74219059a5bcb8320cbb4110020f
+      size: 1592
+    - path: data/processed/windows
+      hash: md5
+      md5: 96b7fcbd75f8538f692e8429a8eb441d.dir
+      size: 168371676
+      nfiles: 2629
+    - path: data/processed/windows.csv
+      hash: md5
+      md5: 7d7225f5c28ac5f984525012e5af7d24
+      size: 571324
+    - path: src/data/validate.py
+      hash: md5
+      md5: 6e35691eda81a27c7e7b526496ccc89e
+      size: 5632
+    outs:
+    - path: reports/data_validation.json
+      hash: md5
+      md5: 79f86c2fe7954663db2ef1f6dc4c8fce
+      size: 646
+  clap_embeddings:
+    cmd: python src/extract_clap.py
+    deps:
+    - path: data/processed/windows
+      hash: md5
+      md5: 96b7fcbd75f8538f692e8429a8eb441d.dir
+      size: 168371676
+      nfiles: 2629
+    - path: data/processed/windows.csv
+      hash: md5
+      md5: 7d7225f5c28ac5f984525012e5af7d24
+      size: 571324
+    - path: src/clap_utils.py
+      hash: md5
+      md5: b250de3e804216479979e097d9ea3c40
+      size: 1694
+    - path: src/extract_clap.py
+      hash: md5
+      md5: d0f8d34891bf33a2e90408e99bcde679
+      size: 2612
+    params:
+      configs/clap.yaml:
+        model_name: laion/clap-htsat-unfused
+        sample_rate: 48000
+    outs:
+    - path: data/processed/clap
+      hash: md5
+      md5: 2c198c26cca4acc23f706bb8030ffcd2.dir
+      size: 5444826
+      nfiles: 2

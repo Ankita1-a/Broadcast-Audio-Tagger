@@ -1,0 +1,20 @@
+# Step 9: settings for model D, the small CNN trained to imitate model C (distillation).
+
+# Same features, architecture, training and augmentation as model A, so the ONLY
+# difference between A and D is what the CNN learns from.
+base_config: configs/train_cnn.yaml
+
+run_name: cnn-distilled
+teacher_run: clap-head        # MLflow run of model C; its classifier is the teacher
+
+# The teacher's predictions on training clips come from 5 "out-of-fold" classifiers:
+# each clip is scored by a classifier that never saw it, so the soft labels are honest
+# (a classifier scoring its own training clips is overconfident: ~100% on everything).
+teacher_folds: 5
+
+# Temperature softens the teacher's predictions so the student also learns from the
+# "second-best" guesses (e.g. "mostly applause, a bit like noise").
+temperature: 3.0
+
+# Loss = alpha * (match the teacher) + (1 - alpha) * (match the true label)
+alpha: 0.7

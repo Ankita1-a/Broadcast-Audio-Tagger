@@ -1,0 +1,20 @@
+# Step 8: settings for model C, a small classifier on top of frozen CLAP embeddings.
+# "Frozen" = CLAP itself is not changed; we only train a tiny layer on its 512 numbers.
+
+seed: 42
+experiment: audio-tagger
+
+# Logistic regression: one weight per (embedding number, class). Simple and hard to overfit.
+# C controls regularisation: small C = simpler model. Picked on the validation set.
+c_grid: [0.01, 0.1, 1, 10, 100]
+class_weight: balanced     # rare classes (applause, laughter) count as much as common ones
+
+# Learning curve: how many labelled clips per class are needed to beat zero-shot?
+learning_curve:
+  shots: [1, 2, 5, 10, 25, 50]   # clips per class; "all" is added automatically
+  repeats: 5                     # different random picks per size, since tiny sets are noisy
+
+# MLflow runs to draw as reference lines on the chart.
+reference_runs:
+  zero_shot: clap-zero-shot-ensemble
+  cnn: cnn-baseline

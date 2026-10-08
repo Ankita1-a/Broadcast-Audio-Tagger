@@ -1,0 +1,7 @@
+name: audio-tagger
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - ffmpeg
+prefix: /opt/anaconda3/envs/audio-tagger

@@ -1,0 +1,48 @@
+# Step 4: settings for building the windowed dataset.
+# Change numbers here, not in the code, so every dataset version is reproducible.
+
+seed: 42
+sample_rate: 16000        # everything is converted to 16 kHz mono
+window_s: 2.0             # length of each training example
+silence_db: -55           # windows quieter than this (RMS, dBFS) are dropped
+target_rms_db: -25        # every window is loudness-normalised to this level
+
+splits:
+  musan: {train: 0.70, val: 0.15, test: 0.15}   # split by whole recording
+  esc50_folds: {train: [1, 2, 3], val: [4], test: [5]}   # official ESC-50 folds
+
+musan_windows_per_recording: 4      # cap, so no single long file dominates a class
+esc50_window_starts: [0.0, 1.5, 3.0]  # 3 overlapping windows per 5-second clip
+
+# How many windows per class, across all splits.
+# "all" = keep every window that passes the silence check.
+targets:
+  speech:   {musan: 600}
+  music:    {musan: 600}
+  noise:    {musan: 300, esc50: 300}
+  applause: {esc50: all}
+  laughter: {esc50: all}
+
+speech_over_music:
+  total: 600
+  snr_db: [2, 12]   # speech is 2-12 dB louder than the background music
+
+# ESC-50 categories we use, and the label each becomes.
+# Human sounds (coughing, sneezing, breathing, snoring, crying_baby) are left out on purpose.
+esc50_label_map:
+  clapping: applause
+  laughing: laughter
+  rain: noise
+  wind: noise
+  sea_waves: noise
+  thunderstorm: noise
+  crackling_fire: noise
+  engine: noise
+  train: noise
+  airplane: noise
+  helicopter: noise
+  car_horn: noise
+  siren: noise
+  footsteps: noise
+  keyboard_typing: noise
+  vacuum_cleaner: noise

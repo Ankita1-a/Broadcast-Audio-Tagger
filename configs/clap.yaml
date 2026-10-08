@@ -1,0 +1,51 @@
+# Step 7: settings for CLAP (models B and C).
+# CLAP is a pretrained audio + text model: it maps sounds and sentences into the
+# same space, so a clip of clapping lands close to the sentence "people clapping".
+
+model_name: laion/clap-htsat-unfused   # ~600 MB download, 153M parameters
+sample_rate: 48000                     # CLAP expects 48 kHz; our 16 kHz clips are resampled
+batch_size: 16                         # small batches for 8 GB RAM
+experiment: audio-tagger
+
+# Zero-shot: each class is described in words. No training examples are used.
+# "single" = one plain prompt per class.
+# "ensemble" = several descriptions per class, averaged (usually more robust).
+prompt_sets:
+  single:
+    speech: ["This is a sound of speech."]
+    music: ["This is a sound of music."]
+    speech_over_music: ["This is a sound of speech over music."]
+    applause: ["This is a sound of applause."]
+    laughter: ["This is a sound of laughter."]
+    noise: ["This is a sound of background noise."]
+  ensemble:
+    speech:
+      - "This is a sound of speech."
+      - "A person is talking."
+      - "A man or a woman speaking clearly."
+      - "Someone giving a speech or an interview."
+    music:
+      - "This is a sound of music."
+      - "Instrumental music playing."
+      - "A song played on musical instruments."
+      - "Music playing with no one talking."
+    speech_over_music:
+      - "This is a sound of speech over music."
+      - "A person talking with music playing in the background."
+      - "A radio host speaking over background music."
+      - "Someone narrating while music plays."
+    applause:
+      - "This is a sound of applause."
+      - "An audience clapping."
+      - "People clapping their hands."
+      - "A crowd applauding after a performance."
+    laughter:
+      - "This is a sound of laughter."
+      - "People laughing."
+      - "A person laughing out loud."
+      - "An audience laughing at a joke."
+    noise:
+      - "This is a sound of background noise."
+      - "Traffic, wind or rain noise."
+      - "Machines and engines running."
+      - "Ambient environmental sounds outdoors."

@@ -1,0 +1,31 @@
+# Step 6: settings for model A, the small CNN trained from scratch.
+
+seed: 42
+experiment: audio-tagger
+run_name: cnn-baseline
+
+features:
+  n_mels: 64          # frequency bands in the spectrogram
+  n_fft: 1024         # analysis window (64 ms at 16 kHz)
+  hop_length: 320     # 20 ms between frames -> 101 frames for 2 seconds
+  fmin: 20
+  fmax: 8000          # highest frequency in 16 kHz audio
+
+model:
+  channels: [16, 32, 64, 128]   # filters in each of the 4 conv blocks
+  dropout: 0.3
+
+train:
+  batch_size: 32      # small batches keep memory low on 8 GB
+  max_epochs: 60
+  patience: 10        # stop if validation macro-F1 hasn't improved for 10 epochs
+  lr: 0.001
+  weight_decay: 0.0001
+  class_weights: true # applause and laughter are ~6x rarer than speech
+
+augment:
+  time_shift: true    # randomly roll the clip in time
+  freq_mask: 8        # SpecAugment: hide up to 8 frequency bands
+  time_mask: 20       # SpecAugment: hide up to 20 frames (0.4 s)
+  # No mixup on purpose: mixing a speech clip with a music clip creates
+  # speech_over_music audio, but mixup would label it "half speech, half music".

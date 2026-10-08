@@ -1,0 +1,21 @@
+# Step 10: model registry and promotion settings.
+
+registered_model: audio-tagger   # one name; each model becomes a numbered version of it
+
+# Which MLflow training runs to package and register (model D is deliberately left out).
+candidates:
+  - {family: A_cnn_scratch,      run_name: cnn-baseline,              kind: cnn}
+  - {family: B_clap_zero_shot,   run_name: clap-zero-shot-ensemble,   kind: clap_zero_shot}
+  - {family: C_clap_frozen_head, run_name: clap-head,                 kind: clap_head}
+
+# Packaging check: the packaged model must reproduce the test score its training
+# run logged (within this margin). Catches train/serve differences in preprocessing.
+packaging_tolerance: 0.01
+
+# The promotion gate. A version can become "champion" only if ALL rules pass.
+promotion:
+  alias: champion
+  select_on: val_macro_f1        # chosen on validation; test is only reported
+  min_class_f1: 0.80             # no class may fall below this on validation
+  max_cpu_ms_per_window: 100     # latency budget per 2 s window on CPU (2% of real time)
+  min_improvement: 0.005         # a challenger must beat the champion by at least this
