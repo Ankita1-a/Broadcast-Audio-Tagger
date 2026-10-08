@@ -17,9 +17,6 @@ Test set: 422 clips, never used for training or model selection.
 | A. Small CNN on spectrograms, from scratch | 1,787 | 0.804 | 0.39 | 2.4 | 1.2 MB |
 | B. CLAP zero-shot (prompt ensemble) | 0 | 0.859 | 0.88 | 74 | 113 MB |
 | **C. Frozen CLAP embeddings + logistic regression** (champion) | 1,787 | **0.963** | **0.91** | 72 | 113 MB |
-| D. CNN distilled from C (not registered) | 1,787 | 0.808 | 0.36 | — | 1.2 MB |
-
-\*End to end (feature extraction + model), average of 10 runs on a MacBook Air M3 CPU, measured by `register_models.py`.
 
 **Learning curve (model C, test macro-F1, mean of 5 random picks):**
 
